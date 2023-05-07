@@ -11,3 +11,8 @@ As of May 2023, I'm working on adjusting it to do the equilivalent of grep for "
 It can function as a standalone script or as part of a one liner taking command-line input. 
 
 Expected availability June 2023. 
+
+Additional Notes: This script just like many other on my GitHub page are tools that I delevoped as projects
+in response to my cybersecurity engineering coursework at the University of Arizona. With that in mind, many 
+of the functionality is not novel or groundbreaking, but simply a method for me to apply my skills and have 
+fun with python. 
