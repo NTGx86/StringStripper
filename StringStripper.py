@@ -30,6 +30,8 @@ import argparse                     # Command Line Argument Parsing
 # Print starting message to console
 print('Script Starting\n')
 
+additionalLineCount = 0
+
 try: 
     # Open file named "strings.txt" in read mode and read in all lines
     # Sort the lines by length in reverse order (longest first)
@@ -37,9 +39,38 @@ try:
         # lines is all the strings pulled from a file
         lines = sorted(file.readlines(), key=len, reverse=True)
     
-    print('Processing File: strings.txt\n')   
+    print('Processing File: strings.txt\n')
         
-    
+    # Open "final_lines.txt" in write mode
+    # check for any mathces and write them to the file (basically what you might grep for) 
+    with open('final_lines.txt', 'w') as f:
+        f.write('='*75)
+        f.write('\nWRITING ALL LINES THAT CONTAIN AN: .exe or www. or .com or .dll\n')
+        f.write('='*75)  
+        f.write('\n')
+        for line in lines:
+            if ('.exe' in line) or ('www.' in line) or ('.com' in line) or ('.dll' in line):
+                f.write(line)
+                additionalLineCount += 1
+        f.write('\n') 
+      
+        ''' searching some more '''
+        f.write('='*75)
+        f.write('\nWRITING ADDITIONAL LINES THAT CONTAIN ANY POSSIBLE FILE EXTENSIONS OR URLs\n')
+        f.write('='*75)  
+        f.write('\n')        
+        for line in lines:
+            if not ('.exe' in line) or ('www.' in line) or ('.com' in line) or ('.dll' in line):
+                # pulling out any other lines with possible file extensions
+                possibleFileExtMatch = re.findall(r'\.\w{3}', line)
+                if possibleFileExtMatch:
+                    f.write(line) 
+                    additionalLineCount += 1
+
+        f.write('\n') 
+        f.write('='*75) 
+        f.write('\n')                 
+ 
     # Filter out invalid lines based on these criteria:
     # - Line length must at least 4 characters
     # - Line must not contain 3 or more consecutive non-alphanumeric characters
@@ -66,21 +97,25 @@ try:
             
     final_lines8 = [line for line in final_lines7 if not (len(line.strip()) == 11 and not re.search(r'[%=+;"@#$\]\[\}\{]{3,}', line))]
 
-    # Open a new file named "final_lines.txt" in write mode
+    # Open "final_lines.txt" in append mode
     # Write each line in final_lines8 to the new file
-    with open('final_lines.txt', 'w') as f:
+    with open('final_lines.txt', 'a') as f:
+        f.write('WRITING ALL OTHER STRIPPED LINES\n')
+        f.write('='*75)
+        f.write('\n')
         for line in final_lines8:
             f.write(line)
-
-    # Count the number of lines in final_lines8 and print the count to the console
+        
+        f.write('\n')
+        f.write('='*75)
+        f.write('\nALL STRIPPED LINES PRINTED. SCRIPT COMPLETE.\n')
+        f.write('='*75)      
+        
     print("Number of lines in file before filtering: ", len(lines))
-
-    # print the number of lines for the filtered results
-    print("Number of lines after filtering:          ", len(final_lines8))
-
+    print("Number of lines after filtering:          ", len(final_lines8) + additionalLineCount)
+    
     print('\nOutput File Created: final_lines.txt')
-
-    # Print completion message to console
+    
     print('\nScript Complete')
 
 except Exception as error:
